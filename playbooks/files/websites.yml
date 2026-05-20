@@ -1,47 +1,88 @@
 ---
+# Each entry is checked once, against the listed scheme(s).
+# Fields:
+#   url:     hostname (or host + path) to probe
+#   method:  HTTP method to use (HEAD, GET, OPTIONS, POST)
+#   status:  expected HTTP status code (integer)
+#   schemes: list of schemes to probe; defaults to [https] if omitted
+
 websites:
   - url: redhat.com
-    status: 200
     method: HEAD
+    status: 200
+    schemes: [https]
+
+  - url: access.redhat.com
+    method: HEAD
+    status: 200
+    schemes: [https]
+
   - url: registry.redhat.io
-    status: 404
     method: HEAD
+    status: 404
+    schemes: [https]
+
   - url: quay.io
-    status: 200
     method: HEAD
+    status: 200
+    schemes: [https]
+
   - url: letsencrypt.org
-    status: 200
     method: HEAD
+    status: 200
+    schemes: [https]
+
+  - url: community.letsencrypt.org
+    method: HEAD
+    status: 200
+    schemes: [https]
+
   - url: gcr.io
-    status: 200
     method: GET
+    status: 200
+    schemes: [https]
+
   - url: googleapis.com
-    status: 404
     method: OPTIONS
-  - url: microsoftonline.com
-    status: -1
-    method: POST
+    status: 404
+    schemes: [https]
+
   - url: mcr.microsoft.com
-    status: 200
     method: GET
-  - url: dynatrace.com
     status: 200
-    method: HEAD
-  - url: segment.io
-    status: 200
-    method: HEAD
-  - url: github.com
-    status: 200
-    method: HEAD
-  - url: azure.com
-    status: 200
-    method: HEAD
-  - url: azureedge.net
-    status: -1
-    method: HEAD
+    schemes: [https]
+
   - url: login.microsoftonline.com
-    status: 200
     method: HEAD
+    status: 200
+    schemes: [https]
+
+  - url: acs-mirror.azureedge.net
+    method: HEAD
+    status: 400  # CDN root rejects HEAD with 400; reaching the host is the signal we want.
+    schemes: [https]
+
+  - url: azure.com
+    method: HEAD
+    status: 200
+    schemes: [https]
+
+  - url: dynatrace.com
+    method: HEAD
+    status: 200
+    schemes: [https]
+
+  - url: segment.io
+    method: HEAD
+    status: 200
+    schemes: [https]
+
   - url: consul.segment.io
-    status: 200
     method: HEAD
+    status: 200
+    schemes: [https]
+
+  - url: github.com
+    method: HEAD
+    status: 200
+    schemes: [https]

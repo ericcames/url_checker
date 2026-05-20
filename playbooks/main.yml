@@ -1,5 +1,5 @@
 ---
-- name: Check my websites
+- name: Check reachability of required URLs
   hosts: localhost
   connection: local
   gather_facts: false
@@ -9,26 +9,49 @@
 
   tasks:
 
-    - name: Walking through my list of urls on port 80
+    - name: Probe each URL on its configured scheme(s)
       delegate_to: 127.0.0.1
-      loop: "{{ websites }}"
-      ignore_errors: yes
+      loop: "{{ websites | subelements('schemes') }}"
+      loop_control:
+        label: "{{ item.1 }}://{{ item.0.url }} ({{ item.0.method }})"
+      register: probe_results
+      ignore_errors: true
       ansible.builtin.uri:
-        url: "http://{{ item['url'] }}"
-        method: "{{ item['method'] }}"
-        status_code: "{{ item['status'] }}"
+        url: "{{ item.1 }}://{{ item.0.url }}"
+        method: "{{ item.0.method }}"
+        status_code: "{{ item.0.status }}"
         return_content: false
         validate_certs: false
         follow_redirects: all
+        timeout: 15
 
-    - name: Walking through my list of urls on port 443
-      delegate_to: 127.0.0.1
-      loop: "{{ websites }}"
-      ignore_errors: yes
-      ansible.builtin.uri:
-        url: "https://{{ item['url'] }}"
-        method: "{{ item['method'] }}"
-        status_code: "{{ item['status'] }}"
-        return_content: false
-        validate_certs: false
-        follow_redirects: all
+    - name: Build failure list
+      ansible.builtin.set_fact:
+        url_failures: >-
+          {{ probe_results.results
+             | selectattr('failed', 'equalto', true)
+             | list }}
+
+    - name: Show summary
+      ansible.builtin.debug:
+        msg: >-
+          {{ (probe_results.results | length) - (url_failures | length) }}
+          of {{ probe_results.results | length }} URL probes passed.
+
+    - name: Show failed URLs
+      when: url_failures | length > 0
+      ansible.builtin.debug:
+        msg: >-
+          FAIL: {{ item.item.1 }}://{{ item.item.0.url }}
+          ({{ item.item.0.method }})
+          expected {{ item.item.0.status }}
+          got {{ item.status | default('no response') }}
+          {{ '- ' ~ item.msg if item.msg is defined else '' }}
+      loop: "{{ url_failures }}"
+      loop_control:
+        label: "{{ item.item.1 }}://{{ item.item.0.url }}"
+
+    - name: Fail the play if any URL probe failed
+      when: url_failures | length > 0
+      ansible.builtin.fail:
+        msg: "{{ url_failures | length }} URL probe(s) failed; see output above."
