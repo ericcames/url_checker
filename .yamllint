@@ -1,0 +1,11 @@
+---
+extends: default
+rules:
+  line-length:
+    max: 160
+  truthy:
+    allowed-values: ['true', 'false', 'yes', 'no']
+    # GitHub Actions uses `on:` as a top-level key; don't flag it as truthy.
+    check-keys: false
+  comments:
+    min-spaces-from-content: 1

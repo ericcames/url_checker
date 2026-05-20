@@ -1,0 +1,64 @@
+---
+name: Scheduled URL check
+
+on:
+  schedule:
+    # Mondays at 13:17 UTC
+    - cron: '17 13 * * 1'
+  workflow_dispatch:
+
+jobs:
+  url-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install ansible-core
+        run: pip install ansible-core
+
+      - name: Run URL probe playbook
+        id: probe
+        continue-on-error: true
+        run: ansible-playbook playbooks/main.yml
+
+      - name: Ensure tracking label exists
+        if: steps.probe.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh label create scheduled-check-failed \
+            --color B60205 \
+            --description "Opened by the scheduled URL check workflow" \
+            --force
+
+      - name: Open or update tracking issue
+        if: steps.probe.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          existing=$(gh issue list \
+            --label scheduled-check-failed \
+            --state open \
+            --json number \
+            --jq '.[0].number // empty')
+
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "Scheduled run failed again on $(date -u +%Y-%m-%dT%H:%MZ). See run: ${RUN_URL}"
+          else
+            gh issue create \
+              --title "Scheduled URL check failed: $(date -u +%Y-%m-%d)" \
+              --label scheduled-check-failed \
+              --body "The scheduled URL check failed.
+
+          See the run for details: ${RUN_URL}
+
+          Once the failing URL is investigated and addressed, close this issue."
+          fi
+
+      - name: Fail job to reflect probe failure
+        if: steps.probe.outcome == 'failure'
+        run: exit 1
