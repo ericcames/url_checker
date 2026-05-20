@@ -25,6 +25,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Scheduled `url-check.yml` workflow that runs the playbook weekly on a cron
   (and on manual dispatch); opens (or updates) a tracking issue labeled
   `scheduled-check-failed` on any probe failure — the repo is its own monitor.
+- `README.md` References section citing Red Hat KB article 6972355 as the
+  source of the Azure / Google / Microsoft egress URLs in `websites.yml`.
 
 ### Changed
 - Replaced the dual port-80 / port-443 loop in `playbooks/main.yml` with a

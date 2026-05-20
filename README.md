@@ -50,3 +50,7 @@ N of N URL probes passed.
 
 On failure each failed probe is listed with the URL, method, expected status,
 and what was actually returned, then the play fails with a non-zero exit code.
+
+## References
+
+- [Azure Virtual Appliance Routing with Ansible Automation Platform on Azure](https://access.redhat.com/articles/6972355) — Red Hat KB article documenting the egress URLs required for AAP on Azure. Most of the Azure / Google / Microsoft entries in `playbooks/files/websites.yml` come from this article.
