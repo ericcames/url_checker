@@ -1,0 +1,7 @@
+---
+profile: basic
+
+offline: true
+
+warn_list:
+  - no-changed-when

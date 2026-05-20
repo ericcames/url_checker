@@ -16,6 +16,15 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   vs. actual status) and exits non-zero when any probe fails.
 - `README.md` documenting usage and the `websites.yml` entry schema.
 - `CHANGELOG.md` (this file).
+- Repo scaffolding ported from `aap.selfservice` template:
+  `CLAUDE.md`, `CODE_OF_CONDUCT.md`, `CONTRIBUTING.md`, `.gitignore`,
+  `.yamllint`, `.ansible-lint`.
+- `.github/` folder: `ISSUE_TEMPLATE/{bug_report,feature_request}.md`,
+  `pull_request_template.md`, `SECURITY.md`.
+- CI workflows: `yamllint.yml` and `ansible-lint.yml` on every PR.
+- Scheduled `url-check.yml` workflow that runs the playbook weekly on a cron
+  (and on manual dispatch); opens (or updates) a tracking issue labeled
+  `scheduled-check-failed` on any probe failure — the repo is its own monitor.
 
 ### Changed
 - Replaced the dual port-80 / port-443 loop in `playbooks/main.yml` with a
