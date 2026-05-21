@@ -45,6 +45,13 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   source of the Azure / Google / Microsoft egress URLs in `websites.yml`.
 
 ### Changed
+- `docs/install-manual.md` now opens with a "Get a shell with
+  `ansible-playbook`" section recommending **Azure Cloud Shell** (zero
+  install, browser-based, works from Windows, adjacent to the customer's
+  AAP), followed by Linux (`dnf`/`apt`/`pip`), macOS (`brew`/`pip`), and
+  Windows-via-WSL2 alternatives. Hub-token prereq reframed as optional —
+  the loader collection is on public Galaxy, no Hub setup required.
+  `docs/install-with-ai.md` updated to match.
 - Documentation caught up to code: README repo-layout tree + updated
   `schemes` example + Output section reflecting the firewall-rule punch
   list; `docs/install-manual.md` "(coming soon)" reference dropped now
