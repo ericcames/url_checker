@@ -1,1 +1,4 @@
 *.retry
+
+# Claude Code local-only personal settings (the skills dir is shared and checked in)
+.claude/settings.local.json
