@@ -4,7 +4,7 @@
 #   url:     hostname (or host + path) to probe
 #   method:  HTTP method to use (HEAD, GET, OPTIONS, POST)
 #   status:  expected HTTP status code (integer)
-#   schemes: list of schemes to probe; defaults to [https] if omitted
+#   schemes: list of schemes to probe (required)
 
 websites:
   - url: redhat.com

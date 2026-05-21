@@ -40,6 +40,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 - CI `yamllint` and `ansible-lint` workflows now also lint `aap_config/`.
+- `playbooks/files/websites.yml` schema comment now says `schemes` is
+  required, instead of the aspirational "defaults to [https] if omitted"
+  (no default was ever implemented — `subelements('schemes')` hard-fails
+  on entries missing the field).
 - Replaced the dual port-80 / port-443 loop in `playbooks/main.yml` with a
   single per-scheme loop driven by each entry's `schemes` field.
 - `playbooks/files/websites.yml` reorganized around the new schema.
