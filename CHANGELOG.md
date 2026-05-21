@@ -7,6 +7,12 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [Unreleased]
 
 ### Added
+- Every entry in `playbooks/files/websites.yml` now probes both `http` and
+  `https`, doubling probe coverage from 16 to 32. Per Red Hat KB 6972355,
+  the Azure firewall must allow http (tcp/80) and https (tcp/443) to every
+  listed host — port 80 is mostly used for redirect-to-443 or by dependent
+  services that may need it. The KB's only HTTPS-only exception
+  (`*.blob.core.windows.net`) is not in this list.
 - `aap_config/` configuration-as-code so customers can load `url_checker` into
   their AAP as a Project + Job Template. Uses `infra.aap_configuration` 4.5.0;
   authenticates via `AAP_HOSTNAME` + `AAP_TOKEN` env vars (BYO token model — no

@@ -5,84 +5,94 @@
 #   method:  HTTP method to use (HEAD, GET, OPTIONS, POST)
 #   status:  expected HTTP status code (integer)
 #   schemes: list of schemes to probe (required)
+#
+# Per Red Hat KB 6972355 (https://access.redhat.com/articles/6972355), the
+# Azure firewall must allow both http (tcp/80) and https (tcp/443) to every
+# hostname listed below — "port 80 is often a redirect to 443, but Red Hat
+# cannot guarantee dependent services do not need it." The playbook's
+# `follow_redirects: all` means an http probe that 301s to https resolves to
+# the final https status, so the same expected `status` works for both
+# schemes on every entry.
+# (The only HTTPS-only exception called out in the KB is
+# *.blob.core.windows.net, which is not present in this list.)
 
 websites:
   - url: redhat.com
     method: HEAD
     status: 200
-    schemes: [https]
+    schemes: [http, https]
 
   - url: access.redhat.com
     method: HEAD
     status: 200
-    schemes: [https]
+    schemes: [http, https]
 
   - url: registry.redhat.io
     method: HEAD
     status: 404
-    schemes: [https]
+    schemes: [http, https]
 
   - url: quay.io
     method: HEAD
     status: 200
-    schemes: [https]
+    schemes: [http, https]
 
   - url: letsencrypt.org
     method: HEAD
     status: 200
-    schemes: [https]
+    schemes: [http, https]
 
   - url: community.letsencrypt.org
     method: HEAD
     status: 200
-    schemes: [https]
+    schemes: [http, https]
 
   - url: gcr.io
     method: GET
     status: 200
-    schemes: [https]
+    schemes: [http, https]
 
   - url: googleapis.com
     method: OPTIONS
     status: 404
-    schemes: [https]
+    schemes: [http, https]
 
   - url: mcr.microsoft.com
     method: GET
     status: 200
-    schemes: [https]
+    schemes: [http, https]
 
   - url: login.microsoftonline.com
     method: HEAD
     status: 200
-    schemes: [https]
+    schemes: [http, https]
 
   - url: acs-mirror.azureedge.net
     method: HEAD
     status: 400  # CDN root rejects HEAD with 400; reaching the host is the signal we want.
-    schemes: [https]
+    schemes: [http, https]
 
   - url: azure.com
     method: HEAD
     status: 200
-    schemes: [https]
+    schemes: [http, https]
 
   - url: dynatrace.com
     method: HEAD
     status: 200
-    schemes: [https]
+    schemes: [http, https]
 
   - url: segment.io
     method: HEAD
     status: 200
-    schemes: [https]
+    schemes: [http, https]
 
   - url: consul.segment.io
     method: HEAD
     status: 200
-    schemes: [https]
+    schemes: [http, https]
 
   - url: github.com
     method: HEAD
     status: 200
-    schemes: [https]
+    schemes: [http, https]
