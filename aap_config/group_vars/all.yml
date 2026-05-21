@@ -1,0 +1,10 @@
+---
+aap_hostname: "{{ lookup('ansible.builtin.env', 'AAP_HOSTNAME') }}"
+aap_token: "{{ lookup('ansible.builtin.env', 'AAP_TOKEN') }}"
+aap_validate_certs: "{{ lookup('ansible.builtin.env', 'AAP_VALIDATE_CERTS') | default('true', true) | bool }}"
+
+url_checker_organization: "{{ lookup('ansible.builtin.env', 'URL_CHECKER_ORG') | default('Default', true) }}"
+url_checker_execution_environment: "{{ lookup('ansible.builtin.env', 'URL_CHECKER_EE') | default('Default execution environment', true) }}"
+url_checker_inventory: "{{ lookup('ansible.builtin.env', 'URL_CHECKER_INVENTORY') | default('Demo Inventory', true) }}"
+url_checker_scm_url: "{{ lookup('ansible.builtin.env', 'URL_CHECKER_SCM_URL') | default('https://github.com/ericcames/url_checker.git', true) }}"
+url_checker_scm_branch: "{{ lookup('ansible.builtin.env', 'URL_CHECKER_SCM_BRANCH') | default('main', true) }}"
