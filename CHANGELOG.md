@@ -7,6 +7,12 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [Unreleased]
 
 ### Added
+- `aap_config/` configuration-as-code so customers can load `url_checker` into
+  their AAP as a Project + Job Template. Uses `infra.aap_configuration` 4.5.0;
+  authenticates via `AAP_HOSTNAME` + `AAP_TOKEN` env vars (BYO token model — no
+  programmatic token creation, no leak path).
+- `docs/install-manual.md` — laptop/desktop install path for the AAP CaC.
+- README "Load into your AAP" section linking to the new docs.
 - `community.letsencrypt.org`, `access.redhat.com`, and `acs-mirror.azureedge.net`
   to the URL list. (`acs-mirror.azureedge.net` expects status `400` on a root
   `HEAD` — the host answering at all is the reachability signal we need.)
@@ -29,6 +35,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   source of the Azure / Google / Microsoft egress URLs in `websites.yml`.
 
 ### Changed
+- CI `yamllint` and `ansible-lint` workflows now also lint `aap_config/`.
 - Replaced the dual port-80 / port-443 loop in `playbooks/main.yml` with a
   single per-scheme loop driven by each entry's `schemes` field.
 - `playbooks/files/websites.yml` reorganized around the new schema.

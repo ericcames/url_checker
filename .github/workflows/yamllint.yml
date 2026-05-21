@@ -15,4 +15,4 @@ jobs:
         run: pip install yamllint
 
       - name: Run yamllint
-        run: yamllint playbooks/ .yamllint .github/
+        run: yamllint playbooks/ aap_config/ .yamllint .github/

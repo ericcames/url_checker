@@ -15,6 +15,17 @@ required. Each entry in `playbooks/files/websites.yml` is probed once per scheme
 it lists. The play exits non-zero if any probe does not match its expected
 status code.
 
+## Load into your AAP
+
+To run this as a Job Template inside your Ansible Automation Platform — the
+intended use case for customers on Red Hat Managed AAP on Azure — see:
+
+- [docs/install-manual.md](docs/install-manual.md) — laptop / desktop install
+  using the configuration-as-code under [`aap_config/`](aap_config/)
+
+A second path for AI-agent-assisted install is tracked in
+[issue #9](https://github.com/ericcames/url_checker/issues/9).
+
 ## Adding a URL
 
 Edit `playbooks/files/websites.yml`. Each entry has four fields:

@@ -1,0 +1,12 @@
+---
+controller_templates:
+  - name: URL Egress Check
+    job_type: run
+    organization: "{{ url_checker_organization }}"
+    project: url_checker
+    playbook: playbooks/main.yml
+    execution_environment: "{{ url_checker_execution_environment }}"
+    inventory: "{{ url_checker_inventory }}"
+    description: >-
+      Probes each URL in playbooks/files/websites.yml on its declared schemes
+      and exits non-zero with a firewall-rule punch list on any miss.

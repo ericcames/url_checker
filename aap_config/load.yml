@@ -1,0 +1,24 @@
+---
+- name: Load url_checker into AAP as a Project + Job Template
+  hosts: localhost
+  gather_facts: false
+
+  vars_files:
+    - files/controller_projects.yml
+    - files/controller_templates.yml
+
+  pre_tasks:
+    - name: Assert AAP_HOSTNAME and AAP_TOKEN are set
+      ansible.builtin.assert:
+        that:
+          - aap_hostname | length > 0
+          - aap_token | length > 0
+        fail_msg: >-
+          AAP_HOSTNAME and AAP_TOKEN must be exported.
+          Create a personal token in the AAP UI (User -> Tokens -> Add)
+          and export it as AAP_TOKEN; export your AAP base URL as AAP_HOSTNAME.
+
+  tasks:
+    - name: Apply configuration via infra.aap_configuration.dispatch
+      ansible.builtin.include_role:
+        name: infra.aap_configuration.dispatch

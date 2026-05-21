@@ -1,0 +1,13 @@
+---
+controller_projects:
+  - name: url_checker
+    organization: "{{ url_checker_organization }}"
+    scm_type: git
+    scm_url: "{{ url_checker_scm_url }}"
+    scm_branch: "{{ url_checker_scm_branch }}"
+    scm_clean: false
+    scm_delete_on_update: false
+    scm_update_on_launch: true
+    description: >-
+      Probes a list of required egress URLs and fails non-zero on any miss.
+      Use to validate Azure firewall rules permit AAP's required egress.
