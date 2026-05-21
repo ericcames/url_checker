@@ -22,9 +22,9 @@ intended use case for customers on Red Hat Managed AAP on Azure — see:
 
 - [docs/install-manual.md](docs/install-manual.md) — laptop / desktop install
   using the configuration-as-code under [`aap_config/`](aap_config/)
-
-A second path for AI-agent-assisted install is tracked in
-[issue #9](https://github.com/ericcames/url_checker/issues/9).
+- [docs/install-with-ai.md](docs/install-with-ai.md) — same install, walked
+  through by Claude Code using the `url-checker-install` skill bundled in
+  this repo
 
 ## Adding a URL
 

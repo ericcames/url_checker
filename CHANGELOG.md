@@ -12,6 +12,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   authenticates via `AAP_HOSTNAME` + `AAP_TOKEN` env vars (BYO token model — no
   programmatic token creation, no leak path).
 - `docs/install-manual.md` — laptop/desktop install path for the AAP CaC.
+- `.claude/skills/url-checker-install/SKILL.md` — Claude Code skill that
+  walks the operator through the AAP CaC install interactively. Token is
+  held in shell env only, never written to disk.
+- `docs/install-with-ai.md` — customer-facing doc for the AI-assisted path.
 - README "Load into your AAP" section linking to the new docs.
 - `community.letsencrypt.org`, `access.redhat.com`, and `acs-mirror.azureedge.net`
   to the URL list. (`acs-mirror.azureedge.net` expects status `400` on a root
