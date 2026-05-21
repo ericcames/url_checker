@@ -31,6 +31,9 @@
           {{ probe_results.results
              | selectattr('failed', 'equalto', true)
              | list }}
+        scheme_to_port:
+          http: 80
+          https: 443
 
     - name: Show summary
       ansible.builtin.debug:
@@ -38,18 +41,35 @@
           {{ (probe_results.results | length) - (url_failures | length) }}
           of {{ probe_results.results | length }} URL probes passed.
 
-    - name: Show failed URLs
+    - name: Show failed URLs with firewall hint
       when: url_failures | length > 0
       ansible.builtin.debug:
-        msg: >-
-          FAIL: {{ item.item.1 }}://{{ item.item.0.url }}
-          ({{ item.item.0.method }})
-          expected {{ item.item.0.status }}
-          got {{ item.status | default('no response') }}
-          {{ '- ' ~ item.msg if item.msg is defined else '' }}
+        msg: |-
+          FAIL: {{ item.item.1 }}://{{ item.item.0.url }} ({{ item.item.0.method }})
+                expected {{ item.item.0.status }} got {{ item.status | default('no response') }}{{ ' - ' ~ item.msg if item.msg is defined else '' }}
+            -> Add egress rule: allow tcp/{{ scheme_to_port[item.item.1] }} to {{ item.item.0.url.split('/') | first }}
       loop: "{{ url_failures }}"
       loop_control:
         label: "{{ item.item.1 }}://{{ item.item.0.url }}"
+
+    - name: Build deduplicated firewall rule list
+      when: url_failures | length > 0
+      ansible.builtin.set_fact:
+        firewall_rules: "{{ (firewall_rules | default([])) + [rule] }}"
+      vars:
+        rule: "allow tcp/{{ scheme_to_port[item.item.1] }} to {{ item.item.0.url.split('/') | first }}"
+      loop: "{{ url_failures }}"
+      loop_control:
+        label: "{{ item.item.1 }}://{{ item.item.0.url }}"
+
+    - name: Show firewall rules to add
+      when: url_failures | length > 0
+      ansible.builtin.debug:
+        msg: |-
+          Firewall rules to add ({{ firewall_rules | unique | length }} unique):
+          {% for r in firewall_rules | unique | sort %}
+            - {{ r }}
+          {% endfor %}
 
     - name: Fail the play if any URL probe failed
       when: url_failures | length > 0
