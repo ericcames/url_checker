@@ -9,7 +9,7 @@ runnable on demand to verify the firewall rules in front of AAP permit its
 required egress.
 
 If you'd rather have an AI agent walk you through this, see
-[install-with-ai.md](install-with-ai.md) *(coming soon)*.
+[install-with-ai.md](install-with-ai.md).
 
 ## Prerequisites
 

@@ -45,6 +45,13 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   source of the Azure / Google / Microsoft egress URLs in `websites.yml`.
 
 ### Changed
+- Documentation caught up to code: README repo-layout tree + updated
+  `schemes` example + Output section reflecting the firewall-rule punch
+  list; `docs/install-manual.md` "(coming soon)" reference dropped now
+  that `install-with-ai.md` ships; `CLAUDE.md` updated file table, CI
+  lint scope, and `ansible.builtin`-only scoping (probe playbook only,
+  not the loader); `CONTRIBUTING.md` branch-naming pattern aligned with
+  practice and failure-path test pattern documented via `-e @<fixture>`.
 - CI `yamllint` and `ansible-lint` workflows now also lint `aap_config/`.
 - `playbooks/files/websites.yml` schema comment now says `schemes` is
   required, instead of the aspirational "defaults to [https] if omitted"
