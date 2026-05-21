@@ -13,14 +13,90 @@ If you'd rather have an AI agent walk you through this, see
 
 ## Prerequisites
 
-- `ansible-core` (any 2.15+). The probe playbook itself uses only
-  `ansible.builtin`; the loader uses one extra collection (next step).
-- A working `~/.ansible.cfg` (or `~/.ansible/ansible.cfg`) with a Red Hat
-  Automation Hub token in the `[galaxy_server.rh_certified]` section. This is
-  the standard developer setup at Red Hat — if you can already
-  `ansible-galaxy collection install` certified content, you're set.
+- A shell with `ansible-playbook` (any `ansible-core` 2.15+). See
+  [the next section](#get-a-shell-with-ansible-playbook) for the easiest
+  way to get one on your platform — including Windows.
 - An AAP instance you can reach over the network, and permission to create
   Projects and Job Templates in it.
+- *(Optional — Red Hat employees only)* A working `~/.ansible/ansible.cfg`
+  with an Automation Hub token in `[galaxy_server.rh_certified]`. The
+  `infra.aap_configuration` collection is published on public Galaxy, so a
+  Hub token is **not** required to install it — but if you already route
+  Galaxy through Hub, your existing config will be honored.
+
+## Get a shell with `ansible-playbook`
+
+Pick whichever fits your workstation. The rest of this guide is identical
+once you have a shell with `ansible-playbook` in your PATH.
+
+### Easiest path: Azure Cloud Shell *(recommended, especially on Windows)*
+
+Azure provides a free browser-based shell with `ansible-core` already
+installed. It runs inside Azure adjacent to your AAP, so network reach is
+typically a non-issue, and there is nothing to install on your workstation.
+
+1. Open <https://shell.azure.com> (or click the **>_** icon in the Azure
+   portal toolbar) and sign in with the same account you use for AAP.
+2. Choose **Bash** (not PowerShell) when prompted.
+3. Confirm Ansible is present:
+   ```bash
+   ansible --version
+   ```
+4. Clone this repo into your Cloud Shell home directory:
+   ```bash
+   git clone https://github.com/ericcames/url_checker.git
+   cd url_checker
+   ```
+5. Continue with [§1 below](#1-install-the-loader-collection).
+
+> Cloud Shell's home directory persists across sessions when you accept
+> the offer to mount cloud storage on first use. If you skipped that, the
+> install commands still work — you just re-clone next time.
+
+### Linux
+
+| Distro | Command |
+|--------|---------|
+| Fedora / RHEL 9+ / CentOS Stream | `sudo dnf install ansible-core` |
+| Debian / Ubuntu 22.04+ | `sudo apt update && sudo apt install ansible-core` |
+| Anything with Python 3.10+ | `python3 -m pip install --user ansible-core` |
+
+Verify:
+```bash
+ansible --version
+```
+
+### macOS
+
+```bash
+brew install ansible      # Homebrew (recommended)
+# or
+python3 -m pip install --user ansible-core
+```
+
+### Windows (via WSL2)
+
+`ansible-core` does not run natively on Windows. Either use Azure Cloud
+Shell above (recommended) or install Windows Subsystem for Linux:
+
+1. In PowerShell (Administrator):
+   ```powershell
+   wsl --install
+   ```
+   This installs Ubuntu by default. Reboot when prompted, then complete
+   the Ubuntu setup wizard.
+2. From the new Ubuntu shell:
+   ```bash
+   sudo apt update
+   sudo apt install ansible-core git
+   ansible --version
+   ```
+3. Clone the repo inside WSL (not in the Windows filesystem):
+   ```bash
+   git clone https://github.com/ericcames/url_checker.git
+   cd url_checker
+   ```
+4. Continue with [§1 below](#1-install-the-loader-collection).
 
 ## 1. Install the loader collection
 
@@ -98,6 +174,10 @@ list of firewall rules that need attention.
 - **`AAP_HOSTNAME and AAP_TOKEN must be exported`** — the loader's pre-task
   caught a missing env var. Re-export and re-run.
 - **`Could not find role 'infra.aap_configuration.dispatch'`** — step 1 didn't
-  install successfully. Check your `~/.ansible.cfg` Hub token, then re-run.
+  install successfully. Re-run `ansible-galaxy collection install -r
+  aap_config/requirements.yml` and watch for errors. If you have a
+  `~/.ansible/ansible.cfg` that routes Galaxy through Automation Hub, make
+  sure the Hub token is current (or temporarily move that file aside to
+  fall back to public Galaxy).
 - **Project sync fails inside AAP** — the AAP host can't reach
   `URL_CHECKER_SCM_URL`. Adjust the URL or open egress for it.

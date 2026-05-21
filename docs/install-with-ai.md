@@ -11,12 +11,15 @@ result** — a Project and a "URL Egress Check" Job Template in your AAP.
 ## Prerequisites
 
 - [Claude Code](https://docs.claude.com/en/docs/claude-code) installed and signed in.
-- `ansible-core` (any 2.15+) on the same machine.
-- A working `~/.ansible.cfg` (or `~/.ansible/ansible.cfg`) with a Red Hat
-  Automation Hub token in `[galaxy_server.rh_certified]`. Required to install
-  the loader collection.
+- A shell with `ansible-playbook` (any `ansible-core` 2.15+). See
+  [install-manual.md → Get a shell with ansible-playbook](install-manual.md#get-a-shell-with-ansible-playbook)
+  for platform-specific install instructions, including the
+  Azure-Cloud-Shell path for Windows users.
 - An AAP instance you can reach and permission to create Projects and Job
   Templates in it.
+- *(Optional — Red Hat employees only)* A working `~/.ansible/ansible.cfg`
+  with an Automation Hub token. The loader collection is on public Galaxy,
+  so a Hub token is **not** required.
 
 ## How it works
 
@@ -64,9 +67,10 @@ result** — a Project and a "URL Egress Check" Job Template in your AAP.
 
 - **"`aap_config/` not found"** — the agent is not running from the repo
   root. `cd` into the cloned `url_checker` directory and re-invoke.
-- **`ansible-galaxy` cannot install `infra.aap_configuration`** — your
-  `~/.ansible/ansible.cfg` is missing a Hub token. See
-  [install-manual.md prerequisites](install-manual.md#prerequisites).
+- **`ansible-galaxy` cannot install `infra.aap_configuration`** — usually
+  network reach to `galaxy.ansible.com`. If you have a `~/.ansible/ansible.cfg`
+  routing Galaxy through Red Hat Automation Hub, make sure the Hub token is
+  current — or temporarily move that file aside to fall back to public Galaxy.
 - **Project sync `failed` after install** — your AAP cannot reach
   `https://github.com/ericcames/url_checker.git`. That's itself a useful
   egress signal — fix the firewall rule and re-trigger sync in the AAP UI.
