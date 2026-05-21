@@ -44,6 +44,11 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   required, instead of the aspirational "defaults to [https] if omitted"
   (no default was ever implemented — `subelements('schemes')` hard-fails
   on entries missing the field).
+- Failure output is now a firewall-rule punch list. Each failed probe
+  prints the corresponding `allow tcp/<port> to <host>` rule beneath it,
+  and the end of the play prints a deduplicated list of every rule the
+  customer needs to add. Failure exit code is unchanged (non-zero on
+  any miss).
 - Replaced the dual port-80 / port-443 loop in `playbooks/main.yml` with a
   single per-scheme loop driven by each entry's `schemes` field.
 - `playbooks/files/websites.yml` reorganized around the new schema.
